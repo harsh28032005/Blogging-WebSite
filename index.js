@@ -1,13 +1,15 @@
 import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
-import router from "./routes/author.js";
+import author from "./routes/author.js";
+import blog from "./routes/blog.js";
 
 const app = express();
 
 app.use(express.json());
 
-app.use("", router)
+app.use("", author)
+app.use("", blog)
 
 const url = process.env.MongoUrl;
 

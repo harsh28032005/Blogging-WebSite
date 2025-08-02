@@ -9,7 +9,7 @@
 ```
 - Blogs Model
 ```
-{ title: {mandatory}, body: {mandatory}, authorId: {mandatory, refs to author model}, tags: {array of string}, category: {string, mandatory, examples: [technology, entertainment, life style, food, fashion]}, subcategory: {array of string, examples[technology-[web development, mobile development, AI, ML etc]] }, createdAt, updatedAt, deletedAt: {when the document is deleted}, isDeleted: {boolean, default: false}, publishedAt: {when the blog is published}, isPublished: {boolean, default: false}}
+{ title: {mandatory}, body: {mandatory}, author_id: {mandatory, refs to author model}, tags: {array of string}, category: {string, mandatory, examples: [technology, entertainment, life style, food, fashion]}, subcategory: {array of string, examples[technology-[web development, mobile development, AI, ML etc]] }, createdAt, updatedAt, deletedAt: {when the document is deleted}, isDeleted: {boolean, default: false}, publishedAt: {when the blog is published}, isPublished: {boolean, default: false}}
 ```
 
 ### Author APIs /authors
@@ -18,8 +18,8 @@
   `Endpoint: BASE_URL/authors`
 
 ### POST /blogs
-- Create a blog document from request body. Get authorId in request body only.
-- Make sure the authorId is a valid authorId by checking the author exist in the authors collection.
+- Create a blog document from request body. Get author_id in request body only.
+- Make sure the author_id is a valid author_id by checking the author exist in the authors collection.
 - Return HTTP status 201 on a successful blog creation. Also return the blog document. The response should be a JSON object like [this](#successful-response-structure) 
 - Create atleast 5 blogs for each author
 
@@ -48,7 +48,7 @@ example of a query url: blogs?filtername=filtervalue&f2=fv2
 - If the blog document doesn't exist then return an HTTP status of 404 with a body like [this](#error-response-structure) 
 
 ### DELETE /blogs?queryParams
-- Delete blog documents by category, authorid, tag name, subcategory name, unpublished
+- Delete blog documents by category, author_id, tag name, subcategory name, unpublished
 - If the blog document doesn't exist then return an HTTP status of 404 with a body like [this](#error-response-structure)
 
 ## Phase II
@@ -56,7 +56,7 @@ example of a query url: blogs?filtername=filtervalue&f2=fv2
 - Add authentication and authroisation feature
 
 ### POST /login
-- Allow an author to login with their email and password. On a successful login attempt return a JWT token contatining the authorId
+- Allow an author to login with their email and password. On a successful login attempt return a JWT token contatining the author_id
 - If the credentials are incorrect return a suitable error message with a valid HTTP status code
 
 ### Authentication
