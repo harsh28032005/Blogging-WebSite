@@ -210,6 +210,7 @@ export const deleted_blog_by_query = async (req, res) => {
           .send({ status: false, msg: "Invalid author_id" });
       else filter["author_id"] = author_id;
     }
+
     if (deep_filter.hasOwnProperty("category")) {
       if (!isNaN(category))
         return res.status(400).send({ status: false, msg: "Invalid category" });
@@ -240,6 +241,7 @@ export const deleted_blog_by_query = async (req, res) => {
         filter["isPublished"] = isPublished;
       }
     }
+
     let deleted_blogs = await blog.updateMany(filter, {
       $set: { isDeleted: true, deletedAt: new Date() },
     });
