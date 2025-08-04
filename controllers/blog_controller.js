@@ -6,7 +6,7 @@ export const create_blog = async (req, res) => {
   try {
     let { title, body, author_id, tags, category, subcategory } = req.body;
 
-    if (!Object.keys(req.body))
+    if (!Object.keys(req.body).length)
       return res
         .status(400)
         .send({ status: false, msg: "Request body can not be empty" });
@@ -37,51 +37,54 @@ export const create_blog = async (req, res) => {
     });
 
     if (!is_author_exist)
-      return res.status(400).send({ status: false, msg: "No author found" });
+      return res.status(404).send({ status: false, msg: "No author found" });
 
-    if (req.body.hasOwnProperty("tags"))
+    if (req.body.hasOwnProperty("tags")) {
       if (!Array.isArray(tags))
         return res
           .status(400)
           .send({ status: false, msg: "Invalid format of tags" });
 
-    if (!tags.length)
-      return res.status(400).send({ status: false, msg: "Mention some tags" });
-
-    for (let ele of tags)
-      if (!isNaN(ele))
+      if (!tags.length)
         return res
           .status(400)
-          .send({ status: false, msg: "Invalid tag element" });
+          .send({ status: false, msg: "Mention some tags" });
 
-    if (!category.length)
+      for (let ele of tags) {
+        if (!isNaN(ele))
+          return res
+            .status(400)
+            .send({ status: false, msg: "Invalid tag element" });
+      }
+    }
+    if (!category)
       return res
         .status(400)
         .send({ status: false, msg: "category is required" });
 
-    for (let ele of category)
-      if (!isNaN(ele))
-        return res
-          .status(400)
-          .send({ status: false, msg: "Invalid category element" });
+    if (!isNaN(category))
+      return res
+        .status(400)
+        .send({ status: false, msg: "Invalid category" });
 
-    if (req.body.hasOwnProperty("subcategory"))
+    if (req.body.hasOwnProperty("subcategory")) {
       if (!Array.isArray(subcategory))
         return res
           .status(400)
           .send({ status: false, msg: "Invalid format of subcategory" });
 
-    if (!subcategory.length)
-      return res
-        .status(400)
-        .send({ status: false, msg: "Mention some subcategory" });
-
-    for (let ele of subcategory)
-      if (!isNaN(ele))
+      if (!subcategory.length)
         return res
           .status(400)
-          .send({ status: false, msg: "Invalid subcategory element" });
+          .send({ status: false, msg: "Mention some subcategory" });
 
+      for (let ele of subcategory) {
+        if (!isNaN(ele))
+          return res
+            .status(400)
+            .send({ status: false, msg: "Invalid subcategory element" });
+      }
+    }
     const save_data = await blog.create(req.body);
     return res.status(201).send({
       status: true,
@@ -97,7 +100,7 @@ export const get_blog = async (req, res) => {
   try {
     let { author_id, category, tags, subcategory } = req.query;
 
-    let filter = { isDeleted: false };
+    let filter = { isDeleted: false, isPublished: true };
 
     if (author_id) filter.author_id = author_id;
 
